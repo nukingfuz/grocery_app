@@ -85,7 +85,8 @@ function renderList() {
     content.appendChild(tags);
 
     const delBtn = document.createElement('button');
-    delBtn.textContent = '🗑️';
+    delBtn.textContent = 'Delete';
+    delBtn.className = 'delete-btn';
     delBtn.addEventListener('click', () => {
       groceryList.splice(index, 1);
       saveList();
@@ -93,7 +94,7 @@ function renderList() {
 
     const handle = document.createElement('span');
     handle.className = 'drag-handle';
-    handle.innerHTML = '&#8942;&#8942;'; // vertical dots
+    handle.innerHTML = '&#8942;&#8942;';
 
     const actions = document.createElement('div');
     actions.className = 'actions';
