@@ -1,31 +1,36 @@
 // Grocery List App Script
 let groceryList = JSON.parse(localStorage.getItem('groceryList')) || [];
+let knownStores = new Set();
+let knownCategories = new Set();
+
 const listEl = document.getElementById('grocery-list');
 const form = document.getElementById('item-form');
 const darkToggle = document.getElementById('dark-mode-toggle');
 const filterMode = document.getElementById('filter-mode');
 const clearCheckedBtn = document.getElementById('clear-checked');
 
-// Save and render
 function saveList() {
+  groceryList.forEach(item => {
+    knownStores.add(item.store);
+    knownCategories.add(item.category);
+  });
   localStorage.setItem('groceryList', JSON.stringify(groceryList));
+  updateSuggestions();
   renderList();
 }
 
-// Add new item
 form.addEventListener('submit', e => {
   e.preventDefault();
   const name = document.getElementById('item-name').value.trim();
   const quantity = document.getElementById('item-quantity').value.trim();
-  const store = document.getElementById('item-store').value;
-  const category = document.getElementById('item-category').value;
+  const store = document.getElementById('item-store').value.trim();
+  const category = document.getElementById('item-category').value.trim();
   if (!name || !quantity || !store || !category) return;
   groceryList.push({ name, quantity, store, category, checked: false });
   form.reset();
   saveList();
 });
 
-// Render list
 function renderList() {
   listEl.innerHTML = '';
   let sortedList = [...groceryList];
@@ -107,7 +112,26 @@ function renderList() {
   });
 }
 
-// Editable field
+function updateSuggestions() {
+  const storeDatalist = document.getElementById('store-suggestions');
+  const categoryDatalist = document.getElementById('category-suggestions');
+
+  storeDatalist.innerHTML = '';
+  categoryDatalist.innerHTML = '';
+
+  knownStores.forEach(store => {
+    const opt = document.createElement('option');
+    opt.value = store;
+    storeDatalist.appendChild(opt);
+  });
+
+  knownCategories.forEach(cat => {
+    const opt = document.createElement('option');
+    opt.value = cat;
+    categoryDatalist.appendChild(opt);
+  });
+}
+
 function createEditableField(value, onSave) {
   const span = document.createElement('span');
   span.className = 'editable';
@@ -123,7 +147,6 @@ function createEditableField(value, onSave) {
   return span;
 }
 
-// Dark mode
 darkToggle.addEventListener('click', () => {
   document.body.classList.toggle('dark');
   localStorage.setItem('darkMode', document.body.classList.contains('dark'));
@@ -133,10 +156,8 @@ if (localStorage.getItem('darkMode') === 'true') {
   document.body.classList.add('dark');
 }
 
-// Filter mode
 filterMode.addEventListener('change', renderList);
 
-// Clear checked
 clearCheckedBtn.addEventListener('click', () => {
   if (confirm('Remove all checked items?')) {
     groceryList = groceryList.filter(item => !item.checked);
@@ -144,4 +165,5 @@ clearCheckedBtn.addEventListener('click', () => {
   }
 });
 
+updateSuggestions();
 renderList();
