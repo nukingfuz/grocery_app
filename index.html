@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="manifest" href="manifest.json">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grocery List App</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Apple-like App Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Grocery List">
+  <link rel="apple-touch-icon" href="icon.png">
+
+  <!-- Sortable.js for Drag-and-Drop -->
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+</head>
+<body>
+  <h1>🛒 Grocery List</h1>
+
+  <div class="toolbar">
+    <button id="dark-mode-toggle">🌙</button>
+    <select id="filter-mode">
+      <option value="all">All Items</option>
+      <option value="store">Group by Store</option>
+      <option value="category">Group by Category</option>
+    </select>
+    <button id="clear-checked">🧹 Clear Checked</button>
+  </div>
+
+  <form id="item-form">
+    <input type="text" id="item-name" placeholder="Item name" required />
+    <input type="text" id="item-quantity" placeholder="Quantity" required />
+    <select id="item-store" required>
+      <option value="">Store</option>
+      <option value="HEB">HEB</option>
+      <option value="HMart">HMart</option>
+      <option value="Costco">Costco</option>
+    </select>
+    <select id="item-category" required>
+      <option value="">Category</option>
+      <option value="Produce">Produce</option>
+      <option value="Meat">Meat</option>
+      <option value="Snacks">Snacks</option>
+      <option value="Dairy">Dairy</option>
+    </select>
+    <button type="submit">Add</button>
+  </form>
+
+  <ul id="grocery-list"></ul>
+
+  <script src="script.js"></script>
+</body>
+</html>
