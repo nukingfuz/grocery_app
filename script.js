@@ -5,7 +5,6 @@ let knownCategories = new Set();
 
 const listEl = document.getElementById('grocery-list');
 const form = document.getElementById('item-form');
-const darkToggle = document.getElementById('dark-mode-toggle');
 const filterMode = document.getElementById('filter-mode');
 const clearCheckedBtn = document.getElementById('clear-checked');
 
@@ -92,9 +91,14 @@ function renderList() {
       saveList();
     });
 
+    const handle = document.createElement('span');
+    handle.className = 'drag-handle';
+    handle.innerHTML = '&#8942;&#8942;'; // vertical dots
+
     const actions = document.createElement('div');
     actions.className = 'actions';
     actions.appendChild(delBtn);
+    actions.appendChild(handle);
 
     li.appendChild(checkbox);
     li.appendChild(content);
@@ -104,6 +108,7 @@ function renderList() {
 
   Sortable.create(listEl, {
     animation: 150,
+    handle: '.drag-handle',
     onEnd: evt => {
       const [movedItem] = groceryList.splice(evt.oldIndex, 1);
       groceryList.splice(evt.newIndex, 0, movedItem);
@@ -145,15 +150,6 @@ function createEditableField(value, onSave) {
     }
   });
   return span;
-}
-
-darkToggle.addEventListener('click', () => {
-  document.body.classList.toggle('dark');
-  localStorage.setItem('darkMode', document.body.classList.contains('dark'));
-});
-
-if (localStorage.getItem('darkMode') === 'true') {
-  document.body.classList.add('dark');
 }
 
 filterMode.addEventListener('change', renderList);
