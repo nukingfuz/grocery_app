@@ -85,8 +85,8 @@ function renderList() {
     content.appendChild(tags);
 
     const delBtn = document.createElement('button');
-    delBtn.textContent = 'Delete';
     delBtn.className = 'delete-btn';
+    delBtn.innerHTML = '<strong>X</strong>';
     delBtn.addEventListener('click', () => {
       groceryList.splice(index, 1);
       saveList();
@@ -156,10 +156,8 @@ function createEditableField(value, onSave) {
 filterMode.addEventListener('change', renderList);
 
 clearCheckedBtn.addEventListener('click', () => {
-  if (confirm('Remove all checked items?')) {
-    groceryList = groceryList.filter(item => !item.checked);
-    saveList();
-  }
+  groceryList.forEach(item => item.checked = false);
+  saveList();
 });
 
 updateSuggestions();
