@@ -194,3 +194,20 @@ form button {
   cursor: pointer;
   font-weight: 500;
 }
+
+.top-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
+#add-item-btn.full-add {
+  font-size: 2rem;
+  font-weight: bold;
+  border-radius: 16px;
+  width: 100%;
+  background-color: #4CAF50;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
