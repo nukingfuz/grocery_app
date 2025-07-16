@@ -1,4 +1,4 @@
-// Grocery List App – Rev3 Final Fix Edition
+// Grocery List App Script (Rev3 - Finalized Drag & Checkbox)
 let groceryList = JSON.parse(localStorage.getItem('groceryList')) || [];
 
 const listEl = document.getElementById('grocery-list');
@@ -21,53 +21,44 @@ function saveList() {
 
 function renderList() {
   listEl.innerHTML = '';
-  const uncheckedItems = groceryList.filter(item => !item.checked);
-  const checkedItems = groceryList
-    .filter(item => item.checked)
-    .sort((a, b) => a.store.localeCompare(b.store) || a.category.localeCompare(b.category) || a.name.localeCompare(b.name));
 
-  const sorted = [...uncheckedItems, ...checkedItems];
+  let unchecked = groceryList.filter(item => !item.checked);
+  let checked = groceryList.filter(item => item.checked);
+  checked.sort((a, b) => {
+    return a.store.localeCompare(b.store) || a.category.localeCompare(b.category) || a.name.localeCompare(b.name);
+  });
 
-  if (filterMode.value === 'store') {
-    sorted.sort((a, b) => a.store.localeCompare(b.store));
-  } else if (filterMode.value === 'category') {
-    sorted.sort((a, b) => a.category.localeCompare(b.category));
-  }
+  const allItems = [...unchecked, ...checked];
 
-  sorted.forEach((item, index) => {
+  allItems.forEach((item, index) => {
     const li = document.createElement('li');
     li.className = item.checked ? 'checked' : '';
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.checked = item.checked;
-    checkbox.addEventListener('change', (e) => {
-      groceryList[index].checked = e.target.checked;
+    checkbox.addEventListener('change', () => {
+      item.checked = checkbox.checked;
       saveList();
     });
 
     const content = document.createElement('div');
     content.className = 'content';
-    const nameSpan = document.createElement('span');
-    nameSpan.textContent = item.name;
-    content.appendChild(nameSpan);
+    const name = document.createElement('span');
+    name.textContent = item.name;
+    content.appendChild(name);
 
     const tags = document.createElement('div');
     tags.className = 'tags';
-
     const storeTag = document.createElement('span');
     storeTag.className = 'pill store';
     storeTag.textContent = item.store;
     const categoryTag = document.createElement('span');
     categoryTag.className = 'pill category';
     categoryTag.textContent = item.category;
-
     tags.appendChild(storeTag);
     tags.appendChild(categoryTag);
     content.appendChild(tags);
-
-    const actions = document.createElement('div');
-    actions.className = 'actions';
 
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'delete-btn';
@@ -76,14 +67,15 @@ function renderList() {
       groceryList.splice(index, 1);
       saveList();
     });
-    actions.appendChild(deleteBtn);
 
-    if (!item.checked) {
-      const dragHandle = document.createElement('span');
-      dragHandle.className = 'drag-handle';
-      dragHandle.innerHTML = '&#8942;&#8942;';
-      actions.appendChild(dragHandle);
-    }
+    const handle = document.createElement('span');
+    handle.className = 'drag-handle';
+    handle.innerHTML = '&#8942;&#8942;';
+
+    const actions = document.createElement('div');
+    actions.className = 'actions';
+    actions.appendChild(deleteBtn);
+    if (!item.checked) actions.appendChild(handle);
 
     li.appendChild(checkbox);
     li.appendChild(content);
@@ -91,17 +83,16 @@ function renderList() {
     listEl.appendChild(li);
   });
 
-  Sortable.create(listEl, {
-    animation: 200,
+  new Sortable(listEl, {
+    animation: 150,
     handle: '.drag-handle',
     filter: '.checked',
-    ghostClass: 'sortable-ghost',
+    draggable: 'li:not(.checked)',
     onEnd: e => {
-      const unchecked = groceryList.filter(i => !i.checked);
-      const checked = groceryList.filter(i => i.checked).sort((a, b) => a.store.localeCompare(b.store) || a.category.localeCompare(b.category) || a.name.localeCompare(b.name));
-      const [moved] = unchecked.splice(e.oldIndex, 1);
-      unchecked.splice(e.newIndex, 0, moved);
-      groceryList = [...unchecked, ...checked];
+      const fromIndex = e.oldIndex;
+      const toIndex = e.newIndex;
+      const item = groceryList.splice(fromIndex, 1)[0];
+      groceryList.splice(toIndex, 0, item);
       saveList();
     }
   });
@@ -123,11 +114,9 @@ addItemBtn.addEventListener('click', () => {
   addItemModal.classList.toggle('hidden');
   form.reset();
 });
-
 closeAddModalBtn.addEventListener('click', () => addItemModal.classList.add('hidden'));
 settingsBtn.addEventListener('click', () => settingsModal.classList.toggle('hidden'));
 closeSettingsBtn.addEventListener('click', () => settingsModal.classList.add('hidden'));
-
 filterMode.addEventListener('change', renderList);
 
 clearCheckedBtn.addEventListener('click', () => {
