@@ -1,67 +1,126 @@
-/* Grocery List App Styles */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   background-color: #f9f9f9;
-  margin: 0;
-  padding: 1rem;
-  max-width: 640px;
-  margin-inline: auto;
   color: #111;
+  padding: 16px;
+  max-width: 640px;
+  margin: auto;
+  box-sizing: border-box;
+  transition: background-color 0.3s ease;
 }
 
 h1 {
   text-align: center;
   font-size: 2rem;
-  margin-bottom: 1.25rem;
   font-weight: 600;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.5px;
+  opacity: 0;
+  animation: fadeIn 0.6s ease forwards;
 }
 
 .toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
   justify-content: center;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+  padding: 10px 0;
+  opacity: 0;
+  animation: fadeIn 0.4s ease 0.2s forwards;
+  position: relative;
 }
 
+.toolbar button,
 .toolbar select,
-.toolbar button {
-  padding: 0.6rem 1rem;
+.upload-btn {
+  padding: 10px 16px;
   font-size: 1rem;
-  border-radius: 12px;
   border: none;
-  background: white;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 14px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  flex: 1 1 auto;
+  min-width: 120px;
+  max-width: 200px;
+  text-align: center;
+  transition: all 0.2s;
   font-weight: 500;
 }
 
-.toolbar .narrow {
-  padding-inline: 0.8rem;
-  font-size: 0.95rem;
+.toolbar button:active,
+.toolbar select:active {
+  transform: scale(0.98);
+  background-color: #f0f0f0;
+}
+
+.narrow {
+  padding: 6px 10px !important;
+  min-width: 100px !important;
+}
+
+.upload-btn {
+  display: inline-block;
+  cursor: pointer;
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  animation: fadeIn 0.6s ease 0.3s forwards;
+  opacity: 0;
+}
+
+form input,
+form button {
+  padding: 10px 14px;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  flex: 1 1 40%;
+  min-width: 140px;
+  font-weight: 500;
+}
+
+form button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  flex: 1 1 100%;
+  font-weight: 600;
 }
 
 ul#grocery-list {
-  -webkit-user-select: none;
-  touch-action: pan-y;
   list-style: none;
   padding: 0;
   margin: 0;
+  animation: fadeIn 0.6s ease 0.4s forwards;
+  opacity: 0;
+  -webkit-user-select: none;
+  touch-action: pan-y;
 }
 
 #grocery-list li {
-  background: #fff;
-  border-radius: 14px;
-  padding: 0.75rem;
-  margin-bottom: 0.75rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  background: white;
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 16px;
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  justify-content: space-between;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
   flex-wrap: wrap;
-  font-size: 1rem;
+  gap: 10px;
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+  font-size: 1.05rem;
+  animation: slideFade 0.25s ease;
 }
 
 #grocery-list li.checked {
@@ -69,151 +128,138 @@ ul#grocery-list {
 }
 
 #grocery-list input[type='checkbox'] {
-  transform: scale(1.3);
-  margin-top: 4px;
+  margin-right: 16px;
+  margin-top: 8px;
+  transform: scale(1.4);
 }
 
 .content {
-  flex: 1 1 auto;
-  min-width: 60%;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+  min-width: 60%;
 }
 
 .tags {
+  font-size: 0.85rem;
   display: flex;
-  gap: 6px;
   flex-wrap: wrap;
+  gap: 8px;
   margin-top: 2px;
 }
 
 .pill {
-  font-size: 0.75rem;
-  font-weight: 500;
   padding: 4px 10px;
   border-radius: 999px;
+  font-weight: 500;
   color: white;
 }
 
 .pill.store {
-  background-color: #4CAF50;
+  background: #4CAF50;
 }
 
 .pill.category {
-  background-color: #2196F3;
+  background: #2196F3;
 }
 
 .editable {
-  background: transparent;
+  display: inline-block;
   border: none;
-  border-radius: 6px;
-  padding: 4px 6px;
+  background: transparent;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: background 0.2s;
+  min-width: 20px;
+  max-width: 150px;
+  word-wrap: break-word;
+  white-space: normal;
   font-size: 1rem;
   font-weight: 500;
-  word-break: break-word;
-  white-space: normal;
 }
 
 .editable:focus {
   outline: none;
-  background: #def3e0;
+  background-color: #def3e0;
 }
 
 .actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  justify-content: flex-end;
+  min-width: 80px;
+  flex-shrink: 0;
 }
 
 .delete-btn {
-  background: #ffe2e2;
+  background: #ffd6d6;
   border: none;
-  border-radius: 6px;
-  padding: 4px 8px;
+  border-radius: 8px;
+  padding: 6px;
   cursor: pointer;
-  font-weight: bold;
-  color: #c00;
+  font-size: 1rem;
+  line-height: 1;
+  color: black;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   height: 32px;
   width: 32px;
-  font-size: 1rem;
-  transition: background 0.2s;
+  transition: background 0.15s ease;
 }
 
 .delete-btn:active {
-  background: #ffc5c5;
+  background: #ffbfbf;
+  transform: scale(0.95);
 }
 
 .drag-handle {
-  touch-action: none; /* Prevent browser from hijacking gestures */
   cursor: grab;
-  font-size: 1.25rem;
-  color: #888;
-  padding: 0 4px;
+  font-size: 1.4rem;
+  padding: 0 6px;
   user-select: none;
+  touch-action: none;
+  color: #888;
+  transition: transform 0.15s ease;
+  display: flex;
+  align-items: center;
+}
+
+.drag-handle:active {
+  transform: scale(1.15);
 }
 
 .sortable-chosen {
-  background-color: #e0f7fa !important;
+  background: #f0f8ff !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
   transform: scale(1.02) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
 }
 
 .sortable-ghost {
   opacity: 0.4;
-  background-color: #bbdefb;
+  background: #dfeffd;
 }
 
-.modal {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
 }
 
-.modal.hidden {
-  display: none;
-}
-
-.modal form,
-.settings-content {
-  background: white;
-  padding: 1.25rem;
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 90%;
-  max-width: 400px;
-}
-
-.modal input,
-.modal button,
-.upload-btn {
-  font-size: 1rem;
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-family: inherit;
-}
-
-.modal button {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.upload-btn {
-  display: inline-block;
-  text-align: center;
-  background: #f0f0f0;
-  cursor: pointer;
+@keyframes slideFade {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
