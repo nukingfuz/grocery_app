@@ -125,6 +125,7 @@ ul.sublist {
   transition: box-shadow 0.2s ease, transform 0.15s ease;
   font-size: 1.05rem;
   animation: slideFade 0.25s ease;
+  transition: all 0.2s ease;
 }
 
 #grocery-list li.checked {
@@ -235,14 +236,17 @@ ul.sublist {
 }
 
 .sortable-chosen {
-  background: #f0f8ff !important;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
+  background: #e6f7ff !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2) !important;
   transform: scale(1.02) !important;
+  z-index: 100;
 }
 
 .sortable-ghost {
-  opacity: 0.4;
-  background: #dfeffd;
+  opacity: 0.3;
+  transform: scale(0.98);
+  border: 2px dashed #ccc;
+  background: #f5f5f5;
 }
 
 @keyframes fadeIn {
