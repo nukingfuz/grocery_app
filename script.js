@@ -23,6 +23,8 @@ function generateId() {
 function saveList() {
   localStorage.setItem('groceryList', JSON.stringify(groceryList));
   renderList();
+  updateSuggestions();
+
 }
 
 function sortItems(list) {
@@ -31,6 +33,29 @@ function sortItems(list) {
     a.category.localeCompare(b.category) ||
     a.name.localeCompare(b.name)
   );
+}
+
+function updateSuggestions() {
+  const stores = [...new Set(groceryList.map(item => item.store).filter(Boolean))];
+  const categories = [...new Set(groceryList.map(item => item.category).filter(Boolean))];
+
+  const storeList = document.getElementById('store-suggestions');
+  const categoryList = document.getElementById('category-suggestions');
+
+  storeList.innerHTML = '';
+  categoryList.innerHTML = '';
+
+  stores.forEach(store => {
+    const option = document.createElement('option');
+    option.value = store;
+    storeList.appendChild(option);
+  });
+
+  categories.forEach(category => {
+    const option = document.createElement('option');
+    option.value = category;
+    categoryList.appendChild(option);
+  });
 }
 
 function renderList() {
