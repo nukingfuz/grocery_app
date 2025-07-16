@@ -153,14 +153,14 @@ ul#grocery-list {
 }
 
 .sortable-chosen {
-  background-color: #e6f7ff !important;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0.9;
   transform: scale(1.02);
+  z-index: 2;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .sortable-ghost {
-  opacity: 0.4;
-  background: #dfeffd;
+  display: none !important;
 }
 
 .modal {

@@ -33,6 +33,7 @@ function renderList() {
   let unchecked = groceryList.filter(item => !item.checked);
   let checked = groceryList.filter(item => item.checked);
 
+  // Sort checked by store > category > name
   checked.sort((a, b) =>
     a.store.localeCompare(b.store) ||
     a.category.localeCompare(b.category) ||
@@ -48,55 +49,62 @@ function renderList() {
 
   const allItems = [...unchecked, ...checked];
 
-  allItems.forEach(item => {
+  allItems.forEach((item, index) => {
     const li = document.createElement('li');
     if (item.checked) li.classList.add('checked');
 
+    // Checkbox
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.checked = item.checked;
     checkbox.addEventListener('change', () => {
-      const target = groceryList.find(i => i.id === item.id);
-      if (target) {
-        target.checked = checkbox.checked;
-        saveList();
-      }
+      item.checked = checkbox.checked;
+      saveList();
     });
 
+    // Content section
     const content = document.createElement('div');
     content.className = 'content';
     const name = document.createElement('span');
     name.textContent = item.name;
     content.appendChild(name);
 
+    // Tags
     const tags = document.createElement('div');
     tags.className = 'tags';
+
     const storeTag = document.createElement('span');
     storeTag.className = 'pill store';
     storeTag.textContent = item.store;
+
     const categoryTag = document.createElement('span');
     categoryTag.className = 'pill category';
     categoryTag.textContent = item.category;
+
     tags.appendChild(storeTag);
     tags.appendChild(categoryTag);
     content.appendChild(tags);
 
-    const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'delete-btn';
-    deleteBtn.innerHTML = '<strong>X</strong>';
-    deleteBtn.addEventListener('click', () => {
-      groceryList = groceryList.filter(i => i.id !== item.id);
-      saveList();
-    });
-
-    const dragHandle = document.createElement('span');
-    dragHandle.className = 'drag-handle';
-    dragHandle.innerHTML = '&#8942;&#8942;';
-
+    // Actions
     const actions = document.createElement('div');
     actions.className = 'actions';
-    actions.appendChild(deleteBtn);
-    if (!item.checked) actions.appendChild(dragHandle);
+
+    if (!item.checked) {
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'delete-btn';
+      deleteBtn.innerHTML = '<strong>X</strong>';
+      deleteBtn.addEventListener('click', () => {
+        groceryList.splice(index, 1);
+        saveList();
+      });
+
+      const dragHandle = document.createElement('span');
+      dragHandle.className = 'drag-handle';
+      dragHandle.innerHTML = '&#8942;&#8942;';
+
+      actions.appendChild(deleteBtn);
+      actions.appendChild(dragHandle);
+    }
 
     li.appendChild(checkbox);
     li.appendChild(content);
@@ -104,18 +112,26 @@ function renderList() {
     listEl.appendChild(li);
   });
 
+  // Refined Drag-and-drop (Unchecked only, clean reflow)
   new Sortable(listEl, {
-    animation: 150,
+    animation: 200,
     handle: '.drag-handle',
     draggable: 'li:not(.checked)',
+    ghostClass: 'sortable-ghost',
+    chosenClass: 'sortable-chosen',
     onEnd: evt => {
-      const unchecked = groceryList.filter(item => !item.checked);
-      const checked = groceryList.filter(item => item.checked);
+      const uncheckedItems = groceryList.filter(item => !item.checked);
+      const checkedItems = groceryList.filter(item => item.checked);
+
       const from = evt.oldIndex;
       const to = evt.newIndex;
-      const movedItem = unchecked.splice(from, 1)[0];
-      unchecked.splice(to, 0, movedItem);
-      groceryList = [...unchecked, ...checked];
+
+      if (from === to || from == null || to == null) return;
+
+      const movedItem = uncheckedItems.splice(from, 1)[0];
+      uncheckedItems.splice(to, 0, movedItem);
+
+      groceryList = [...uncheckedItems, ...checkedItems];
       saveList();
     }
   });
