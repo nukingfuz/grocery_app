@@ -1,11 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   background-color: #f9f9f9;
   color: #111;
   padding: 16px;
   max-width: 640px;
   margin: auto;
   box-sizing: border-box;
+  transition: background-color 0.3s ease;
 }
 
 h1 {
@@ -14,6 +17,8 @@ h1 {
   font-weight: 600;
   margin-bottom: 1.5rem;
   letter-spacing: -0.5px;
+  opacity: 0;
+  animation: fadeIn 0.6s ease forwards;
 }
 
 .toolbar {
@@ -22,11 +27,10 @@ h1 {
   gap: 10px;
   justify-content: center;
   margin-bottom: 1.5rem;
-  position: sticky;
-  top: 0;
-  background-color: #f9f9f9;
   padding: 10px 0;
-  z-index: 100;
+  opacity: 0;
+  animation: fadeIn 0.4s ease 0.2s forwards;
+  position: relative;
 }
 
 .toolbar button,
@@ -44,6 +48,7 @@ h1 {
   max-width: 200px;
   text-align: center;
   transition: all 0.2s;
+  font-weight: 500;
 }
 
 .toolbar button:active,
@@ -68,6 +73,8 @@ form {
   gap: 12px;
   justify-content: center;
   margin-bottom: 1.5rem;
+  animation: fadeIn 0.6s ease 0.3s forwards;
+  opacity: 0;
 }
 
 form input,
@@ -78,6 +85,7 @@ form button {
   border: 1px solid #ccc;
   flex: 1 1 40%;
   min-width: 140px;
+  font-weight: 500;
 }
 
 form button {
@@ -93,6 +101,8 @@ ul#grocery-list {
   list-style: none;
   padding: 0;
   margin: 0;
+  animation: fadeIn 0.6s ease 0.4s forwards;
+  opacity: 0;
 }
 
 ul.sublist {
@@ -113,6 +123,7 @@ ul.sublist {
   flex-wrap: wrap;
   gap: 10px;
   transition: box-shadow 0.2s ease, transform 0.15s ease;
+  font-size: 1.05rem;
 }
 
 #grocery-list li.checked {
@@ -135,17 +146,25 @@ ul.sublist {
 
 .tags {
   font-size: 0.85rem;
-  color: #555;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin-top: 2px;
 }
 
 .pill {
-  background: #e6f1ea;
   padding: 4px 10px;
   border-radius: 999px;
   font-weight: 500;
+  color: white;
+}
+
+.pill.store {
+  background: #4CAF50;
+}
+
+.pill.category {
+  background: #2196F3;
 }
 
 .editable {
@@ -210,4 +229,15 @@ ul.sublist {
 
 .drag-handle:active {
   transform: scale(1.15);
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
 }
