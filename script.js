@@ -1,4 +1,4 @@
-// Grocery List App Script (Rev3 – Bulletproof Logic with ID-based Toggle)
+// Grocery List App Script (Rev3 – Bulletproof Logic with Fixed Drag)
 
 let groceryList = JSON.parse(localStorage.getItem('groceryList')) || [];
 
@@ -33,7 +33,6 @@ function renderList() {
   let unchecked = groceryList.filter(item => !item.checked);
   let checked = groceryList.filter(item => item.checked);
 
-  // Sort checked by store > category > name
   checked.sort((a, b) =>
     a.store.localeCompare(b.store) ||
     a.category.localeCompare(b.category) ||
@@ -112,13 +111,16 @@ function renderList() {
     listEl.appendChild(li);
   });
 
-  // Refined Drag-and-drop (Unchecked only, clean reflow)
+  // Fixed Drag-and-Drop
   new Sortable(listEl, {
     animation: 200,
     handle: '.drag-handle',
     draggable: 'li:not(.checked)',
     ghostClass: 'sortable-ghost',
     chosenClass: 'sortable-chosen',
+    forceFallback: true,
+    fallbackOnBody: true,
+    swapThreshold: 0.65,
     onEnd: evt => {
       const uncheckedItems = groceryList.filter(item => !item.checked);
       const checkedItems = groceryList.filter(item => item.checked);

@@ -51,6 +51,7 @@ ul#grocery-list {
   list-style: none;
   padding: 0;
   margin: 0;
+  position: relative;
 }
 
 #grocery-list li {
@@ -65,6 +66,8 @@ ul#grocery-list {
   flex-wrap: wrap;
   gap: 10px;
   transition: background 0.2s;
+  width: 100%;
+  position: relative;
 }
 
 #grocery-list li.checked {
@@ -153,14 +156,17 @@ ul#grocery-list {
 }
 
 .sortable-chosen {
-  opacity: 0.9;
+  background-color: #e0f7ff !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transform: scale(1.02);
-  z-index: 2;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10;
 }
 
 .sortable-ghost {
-  display: none !important;
+  opacity: 0.4;
+  background: #dfeffd;
+  border: 2px dashed #007aff;
+  box-sizing: border-box;
 }
 
 .modal {
