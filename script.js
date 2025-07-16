@@ -2,7 +2,7 @@
 
 let groceryList = JSON.parse(localStorage.getItem('groceryList')) || [];
 
-const listEl = document.getElementById('grocery-list');
+const listEl = document.getElementById('unchecked-list');
 const form = document.getElementById('item-form');
 const nameInput = document.getElementById('item-name');
 const storeInput = document.getElementById('item-store');

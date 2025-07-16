@@ -157,14 +157,17 @@ input[type='checkbox'] {
 }
 
 .sortable-chosen {
-  background-color: #e6f7ff !important;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #f0faff !important;
   transform: scale(1.02);
+  z-index: 1000;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .sortable-ghost {
-  opacity: 0.4;
-  background: #dfeffd;
+  opacity: 0.5;
+  background: #cce7ff;
+  border: 2px dashed #88bde6;
+  transform: scale(0.98);
 }
 
 .modal {
