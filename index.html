@@ -2,48 +2,53 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Grocery List App</title>
-  <link rel="stylesheet" href="style.css" />
-
-  <!-- Apple PWA setup -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Grocery List" />
   <link rel="apple-touch-icon" href="grocery_icon.png" />
   <link rel="manifest" href="manifest.json" />
-
-  <!-- Sortable.js -->
-  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <title>Grocery List App</title>
 </head>
 <body>
-  <h1>🛒 Grocery List</h1>
+  <h1>Grocery List</h1>
 
   <div class="toolbar">
     <select id="filter-mode">
-      <option value="all">All Items</option>
-      <option value="store">Group by Store</option>
-      <option value="category">Group by Category</option>
+      <option value="default">Sort: Default</option>
+      <option value="store">Sort by Store</option>
+      <option value="category">Sort by Category</option>
     </select>
-
-    <button id="download-list">Download Backup</button>
-    <label for="upload-list" class="upload-btn">Upload Backup</label>
-    <input type="file" id="upload-list" accept="application/json" style="display: none;" />
-
-    <button id="clear-checked" class="narrow">Clear Checked</button>
+    <button id="clear-checked" class="narrow">Uncheck All</button>
+    <button id="add-item-btn" class="narrow">+ Add</button>
+    <button id="settings-btn" class="narrow">Settings</button>
   </div>
-
-  <form id="item-form">
-    <input type="text" id="item-name" placeholder="Item name" required />
-    <input type="text" id="item-store" placeholder="Store" list="store-suggestions" required />
-    <datalist id="store-suggestions"></datalist>
-    <input type="text" id="item-category" placeholder="Category" list="category-suggestions" required />
-    <datalist id="category-suggestions"></datalist>
-    <button type="submit">Add</button>
-  </form>
 
   <ul id="grocery-list"></ul>
 
+  <!-- Add Item Modal -->
+  <div id="add-item-modal" class="modal hidden">
+    <form id="item-form">
+      <input id="item-name" placeholder="Item name" required />
+      <input id="item-store" placeholder="Store" list="store-suggestions" required />
+      <input id="item-category" placeholder="Category" list="category-suggestions" required />
+      <datalist id="store-suggestions"></datalist>
+      <datalist id="category-suggestions"></datalist>
+      <button type="submit">Add Item</button>
+      <button type="button" id="close-add-modal">Cancel</button>
+    </form>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal hidden">
+    <div class="settings-content">
+      <button id="download-list">Download List</button>
+      <label class="upload-btn">Upload List<input type="file" id="upload-list" hidden /></label>
+      <button type="button" id="close-settings">Close</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
