@@ -46,12 +46,9 @@ function renderList() {
     a.name.localeCompare(b.name)
   );
 
-  const allItems = [...unchecked, ...checked];
-
-  // Store reference to visible unchecked items for drag mapping
   const listItemMap = [];
 
-  allItems.forEach((item, index) => {
+  [...unchecked, ...checked].forEach((item, index) => {
     const li = document.createElement('li');
     li.setAttribute('data-id', item.id);
     if (item.checked) li.classList.add('checked');
@@ -109,7 +106,6 @@ function renderList() {
     if (!item.checked) listItemMap.push(item);
   });
 
-  // Initialize Sortable *after* rendering
   new Sortable(listEl, {
     animation: 200,
     handle: '.drag-handle',
@@ -124,7 +120,6 @@ function renderList() {
       const movedItem = listItemMap.splice(from, 1)[0];
       listItemMap.splice(to, 0, movedItem);
 
-      // Rebuild groceryList
       const newUnchecked = listItemMap;
       const newChecked = groceryList.filter(item => item.checked);
       groceryList = [...newUnchecked, ...newChecked];
