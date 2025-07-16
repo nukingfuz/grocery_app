@@ -1,41 +1,34 @@
-// Grocery List App Script (Rev3 – Bulletproof Logic)
+// Grocery List App – Rev3: Final Stable Version (Drag + Checkbox Fixed)
 
 let groceryList = JSON.parse(localStorage.getItem('groceryList')) || [];
 
 const listEl = document.getElementById('grocery-list');
 const form = document.getElementById('item-form');
-const nameInput = document.getElementById('item-name');
-const storeInput = document.getElementById('item-store');
-const categoryInput = document.getElementById('item-category');
+const filterMode = document.getElementById('filter-mode');
 const addItemBtn = document.getElementById('add-item-btn');
 const addItemModal = document.getElementById('add-item-modal');
 const closeAddModalBtn = document.getElementById('close-add-modal');
 const settingsBtn = document.getElementById('settings-btn');
 const settingsModal = document.getElementById('settings-modal');
 const closeSettingsBtn = document.getElementById('close-settings');
-const filterMode = document.getElementById('filter-mode');
 const clearCheckedBtn = document.getElementById('clear-checked');
 const downloadBtn = document.getElementById('download-list');
 const uploadInput = document.getElementById('upload-list');
 
+// Save and persist
 function saveList() {
   localStorage.setItem('groceryList', JSON.stringify(groceryList));
   renderList();
 }
 
+// Rendering logic
 function renderList() {
   listEl.innerHTML = '';
 
   let unchecked = groceryList.filter(item => !item.checked);
   let checked = groceryList.filter(item => item.checked);
 
-  // Sorting checked items by store > category > name
-  checked.sort((a, b) =>
-    a.store.localeCompare(b.store) ||
-    a.category.localeCompare(b.category) ||
-    a.name.localeCompare(b.name)
-  );
-
+  // Apply optional filtering
   const filter = filterMode.value;
   if (filter === 'store') {
     unchecked.sort((a, b) => a.store.localeCompare(b.store));
@@ -43,9 +36,16 @@ function renderList() {
     unchecked.sort((a, b) => a.category.localeCompare(b.category));
   }
 
-  const allItems = [...unchecked, ...checked];
+  // Sort checked items by store → category → name
+  checked.sort((a, b) => {
+    return a.store.localeCompare(b.store) ||
+           a.category.localeCompare(b.category) ||
+           a.name.localeCompare(b.name);
+  });
 
-  allItems.forEach((item, index) => {
+  const fullList = [...unchecked, ...checked];
+
+  fullList.forEach((item, index) => {
     const li = document.createElement('li');
     if (item.checked) li.classList.add('checked');
 
@@ -58,21 +58,20 @@ function renderList() {
       saveList();
     });
 
-    // Content section
+    // Item content
     const content = document.createElement('div');
     content.className = 'content';
+
     const name = document.createElement('span');
     name.textContent = item.name;
     content.appendChild(name);
 
-    // Tags
     const tags = document.createElement('div');
     tags.className = 'tags';
 
     const storeTag = document.createElement('span');
     storeTag.className = 'pill store';
     storeTag.textContent = item.store;
-
     const categoryTag = document.createElement('span');
     categoryTag.className = 'pill category';
     categoryTag.textContent = item.category;
@@ -91,14 +90,15 @@ function renderList() {
     });
 
     // Drag handle (only for unchecked)
-    const dragHandle = document.createElement('span');
-    dragHandle.className = 'drag-handle';
-    dragHandle.innerHTML = '&#8942;&#8942;';
-
     const actions = document.createElement('div');
     actions.className = 'actions';
     actions.appendChild(deleteBtn);
-    if (!item.checked) actions.appendChild(dragHandle);
+    if (!item.checked) {
+      const dragHandle = document.createElement('span');
+      dragHandle.className = 'drag-handle';
+      dragHandle.innerHTML = '&#8942;&#8942;';
+      actions.appendChild(dragHandle);
+    }
 
     li.appendChild(checkbox);
     li.appendChild(content);
@@ -106,31 +106,31 @@ function renderList() {
     listEl.appendChild(li);
   });
 
-  // Drag-and-drop setup
+  // Apply drag-and-drop for unchecked items only
   new Sortable(listEl, {
     animation: 150,
     handle: '.drag-handle',
     draggable: 'li:not(.checked)',
-    onEnd: evt => {
-      const uncheckedItems = groceryList.filter(item => !item.checked);
-      const from = evt.oldIndex;
-      const to = evt.newIndex;
-      const movedItem = uncheckedItems.splice(from, 1)[0];
-      uncheckedItems.splice(to, 0, movedItem);
+    filter: '.checked',
+    onEnd: (e) => {
+      const uncheckedItems = groceryList.filter(i => !i.checked);
+      const movedItem = uncheckedItems.splice(e.oldIndex, 1)[0];
+      uncheckedItems.splice(e.newIndex, 0, movedItem);
 
-      const newList = [...uncheckedItems, ...groceryList.filter(item => item.checked)];
-      groceryList = newList;
+      // Rebuild groceryList with reordered unchecked followed by checked
+      groceryList = [...uncheckedItems, ...groceryList.filter(i => i.checked)];
       saveList();
     }
   });
 }
 
-// Form submission
-form.addEventListener('submit', e => {
+// Add Item Logic
+form.addEventListener('submit', (e) => {
   e.preventDefault();
-  const name = nameInput.value.trim();
-  const store = storeInput.value.trim();
-  const category = categoryInput.value.trim();
+  const name = document.getElementById('item-name').value.trim();
+  const store = document.getElementById('item-store').value.trim();
+  const category = document.getElementById('item-category').value.trim();
+
   if (!name || !store || !category) return;
 
   groceryList.push({ name, store, category, checked: false });
@@ -139,49 +139,40 @@ form.addEventListener('submit', e => {
   saveList();
 });
 
-// Modal toggles
+// Modal Controls
 addItemBtn.addEventListener('click', () => {
-  addItemModal.classList.toggle('hidden');
-  form.reset();
+  const wasOpen = !addItemModal.classList.contains('hidden');
+  closeAllModals();
+  if (!wasOpen) addItemModal.classList.remove('hidden');
 });
 
 closeAddModalBtn.addEventListener('click', () => {
   addItemModal.classList.add('hidden');
+  form.reset();
 });
 
 settingsBtn.addEventListener('click', () => {
-  settingsModal.classList.toggle('hidden');
+  const wasOpen = !settingsModal.classList.contains('hidden');
+  closeAllModals();
+  if (!wasOpen) settingsModal.classList.remove('hidden');
 });
 
 closeSettingsBtn.addEventListener('click', () => {
   settingsModal.classList.add('hidden');
 });
 
-// Clear Checked
+function closeAllModals() {
+  addItemModal.classList.add('hidden');
+  settingsModal.classList.add('hidden');
+}
+
+// Filter change
+filterMode.addEventListener('change', renderList);
+
+// Clear all checked items
 clearCheckedBtn.addEventListener('click', () => {
   groceryList.forEach(item => item.checked = false);
   saveList();
-});
-
-// Upload backup
-uploadInput.addEventListener('change', e => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = () => {
-    try {
-      const data = JSON.parse(reader.result);
-      if (Array.isArray(data)) {
-        groceryList = data;
-        saveList();
-      } else {
-        alert('Invalid file format');
-      }
-    } catch {
-      alert('Could not parse file');
-    }
-  };
-  reader.readAsText(file);
 });
 
 // Download backup
@@ -195,8 +186,26 @@ downloadBtn.addEventListener('click', () => {
   URL.revokeObjectURL(url);
 });
 
-// Filter
-filterMode.addEventListener('change', renderList);
+// Upload backup
+uploadInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
 
-// Initial render
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      if (Array.isArray(data)) {
+        groceryList = data;
+        saveList();
+      } else {
+        alert('Invalid file format.');
+      }
+    } catch {
+      alert('Failed to read the file.');
+    }
+  };
+  reader.readAsText(file);
+});
+
 renderList();
