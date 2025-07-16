@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Grocery List App</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 
-  <!-- Apple-like App Meta Tags -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Grocery List">
-  <link rel="apple-touch-icon" href="icon.png">
-  <link rel="manifest" href="manifest.json">
+  <!-- Apple PWA setup -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Grocery List" />
+  <link rel="apple-touch-icon" href="grocery_icon.png" />
+  <link rel="manifest" href="manifest.json" />
 
-  <!-- Sortable.js for Drag-and-Drop -->
+  <!-- Sortable.js -->
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 </head>
 <body>
@@ -25,7 +25,12 @@
       <option value="store">Group by Store</option>
       <option value="category">Group by Category</option>
     </select>
-    <button id="clear-checked">Clear Checked</button>
+
+    <button id="download-list">Download Backup</button>
+    <label for="upload-list" class="upload-btn">Upload Backup</label>
+    <input type="file" id="upload-list" accept="application/json" style="display: none;" />
+
+    <button id="clear-checked" class="narrow">Clear Checked</button>
   </div>
 
   <form id="item-form">

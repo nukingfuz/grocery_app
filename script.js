@@ -7,6 +7,8 @@ const listEl = document.getElementById('grocery-list');
 const form = document.getElementById('item-form');
 const filterMode = document.getElementById('filter-mode');
 const clearCheckedBtn = document.getElementById('clear-checked');
+const downloadBtn = document.getElementById('download-list');
+const uploadInput = document.getElementById('upload-list');
 
 function saveList() {
   try {
@@ -37,26 +39,28 @@ form.addEventListener('submit', e => {
 function renderList() {
   try {
     listEl.innerHTML = '';
-    let sortedList = [...groceryList];
 
-    if (filterMode.value === 'store') {
-      sortedList.sort((a, b) => a.store.localeCompare(b.store));
-    } else if (filterMode.value === 'category') {
-      sortedList.sort((a, b) => a.category.localeCompare(b.category));
-    } else {
-      sortedList.sort((a, b) => a.checked - b.checked);
-    }
+    let uncheckedItems = groceryList.filter(item => !item.checked);
+    let checkedItems = groceryList.filter(item => item.checked);
 
-    sortedList.forEach((item, index) => {
+    // Sort checked items by store then category
+    checkedItems.sort((a, b) => {
+      const storeDiff = a.store.localeCompare(b.store);
+      return storeDiff !== 0 ? storeDiff : a.category.localeCompare(b.category);
+    });
+
+    const fullList = [...uncheckedItems, ...checkedItems];
+
+    fullList.forEach((item, displayIndex) => {
       const li = document.createElement('li');
       li.className = item.checked ? 'checked' : '';
-      li.dataset.index = index;
+      li.dataset.index = groceryList.indexOf(item);
 
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.checked = item.checked;
       checkbox.addEventListener('change', () => {
-        groceryList[index].checked = checkbox.checked;
+        item.checked = checkbox.checked;
         saveList();
       });
 
@@ -64,17 +68,17 @@ function renderList() {
       content.className = 'content';
 
       const nameInput = createEditableField(item.name, newVal => {
-        groceryList[index].name = newVal;
+        item.name = newVal;
         saveList();
       });
 
       const qtyInput = createEditableField(item.quantity, newVal => {
-        groceryList[index].quantity = newVal;
+        item.quantity = newVal;
         saveList();
       });
 
       const storeInput = createEditableField(item.store, newVal => {
-        groceryList[index].store = newVal;
+        item.store = newVal;
         saveList();
       });
 
@@ -93,7 +97,7 @@ function renderList() {
       delBtn.className = 'delete-btn';
       delBtn.innerHTML = '<strong>X</strong>';
       delBtn.addEventListener('click', () => {
-        groceryList.splice(index, 1);
+        groceryList.splice(groceryList.indexOf(item), 1);
         saveList();
       });
 
@@ -103,8 +107,8 @@ function renderList() {
 
       const actions = document.createElement('div');
       actions.className = 'actions';
+      if (!item.checked) actions.appendChild(handle);
       actions.appendChild(delBtn);
-      actions.appendChild(handle);
 
       li.appendChild(checkbox);
       li.appendChild(content);
@@ -115,9 +119,14 @@ function renderList() {
     Sortable.create(listEl, {
       animation: 150,
       handle: '.drag-handle',
+      filter: '.checked',
+      draggable: 'li:not(.checked)',
       onEnd: evt => {
-        const [movedItem] = groceryList.splice(evt.oldIndex, 1);
-        groceryList.splice(evt.newIndex, 0, movedItem);
+        const unchecked = groceryList.filter(item => !item.checked);
+        const checked = groceryList.filter(item => item.checked);
+        const [movedItem] = unchecked.splice(evt.oldIndex, 1);
+        unchecked.splice(evt.newIndex, 0, movedItem);
+        groceryList = [...unchecked, ...checked];
         saveList();
       }
     });
@@ -182,6 +191,35 @@ clearCheckedBtn.addEventListener('click', () => {
   } catch (e) {
     console.error("Error clearing checked:", e);
   }
+});
+
+downloadBtn.addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(groceryList)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'grocery_list_backup.json';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+uploadInput.addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = event => {
+    try {
+      const parsed = JSON.parse(event.target.result);
+      if (Array.isArray(parsed)) {
+        groceryList = parsed;
+        saveList();
+      }
+    } catch (err) {
+      alert("Invalid file format");
+    }
+  };
+  reader.readAsText(file);
 });
 
 updateSuggestions();
