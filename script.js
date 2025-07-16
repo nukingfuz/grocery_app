@@ -9,133 +9,153 @@ const filterMode = document.getElementById('filter-mode');
 const clearCheckedBtn = document.getElementById('clear-checked');
 
 function saveList() {
-  groceryList.forEach(item => {
-    knownStores.add(item.store);
-    knownCategories.add(item.category);
-  });
-  localStorage.setItem('groceryList', JSON.stringify(groceryList));
-  updateSuggestions();
-  renderList();
+  try {
+    localStorage.setItem('groceryList', JSON.stringify(groceryList));
+    updateSuggestions();
+    renderList();
+  } catch (e) {
+    console.error("Error saving list:", e);
+  }
 }
 
 form.addEventListener('submit', e => {
   e.preventDefault();
-  const name = document.getElementById('item-name').value.trim();
-  const quantity = document.getElementById('item-quantity').value.trim();
-  const store = document.getElementById('item-store').value.trim();
-  const category = document.getElementById('item-category').value.trim();
-  if (!name || !quantity || !store || !category) return;
-  groceryList.push({ name, quantity, store, category, checked: false });
-  form.reset();
-  saveList();
+  try {
+    const name = document.getElementById('item-name').value.trim();
+    const quantity = document.getElementById('item-quantity').value.trim();
+    const store = document.getElementById('item-store').value.trim();
+    const category = document.getElementById('item-category').value.trim();
+    if (!name || !quantity || !store || !category) return;
+    groceryList.push({ name, quantity, store, category, checked: false });
+    form.reset();
+    saveList();
+  } catch (e) {
+    console.error("Error adding item:", e);
+  }
 });
 
 function renderList() {
-  listEl.innerHTML = '';
-  let sortedList = [...groceryList];
+  try {
+    listEl.innerHTML = '';
+    let sortedList = [...groceryList];
 
-  if (filterMode.value === 'store') {
-    sortedList.sort((a, b) => a.store.localeCompare(b.store));
-  } else if (filterMode.value === 'category') {
-    sortedList.sort((a, b) => a.category.localeCompare(b.category));
-  } else {
-    sortedList.sort((a, b) => a.checked - b.checked);
-  }
-
-  sortedList.forEach((item, index) => {
-    const li = document.createElement('li');
-    li.className = item.checked ? 'checked' : '';
-    li.dataset.index = index;
-
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.checked = item.checked;
-    checkbox.addEventListener('change', () => {
-      groceryList[index].checked = checkbox.checked;
-      saveList();
-    });
-
-    const content = document.createElement('div');
-    content.className = 'content';
-
-    const nameInput = createEditableField(item.name, newVal => {
-      groceryList[index].name = newVal;
-      saveList();
-    });
-
-    const qtyInput = createEditableField(item.quantity, newVal => {
-      groceryList[index].quantity = newVal;
-      saveList();
-    });
-
-    const storeInput = createEditableField(item.store, newVal => {
-      groceryList[index].store = newVal;
-      saveList();
-    });
-
-    const tags = document.createElement('div');
-    tags.className = 'tags';
-    tags.innerHTML = `
-      Quantity: <span class="pill">${qtyInput.outerHTML}</span>
-      Store: <span class="pill">${storeInput.outerHTML}</span>
-      Category: <span class="pill">${item.category}</span>
-    `;
-
-    content.appendChild(nameInput);
-    content.appendChild(tags);
-
-    const delBtn = document.createElement('button');
-    delBtn.className = 'delete-btn';
-    delBtn.innerHTML = '<strong>X</strong>';
-    delBtn.addEventListener('click', () => {
-      groceryList.splice(index, 1);
-      saveList();
-    });
-
-    const handle = document.createElement('span');
-    handle.className = 'drag-handle';
-    handle.innerHTML = '&#8942;&#8942;';
-
-    const actions = document.createElement('div');
-    actions.className = 'actions';
-    actions.appendChild(delBtn);
-    actions.appendChild(handle);
-
-    li.appendChild(checkbox);
-    li.appendChild(content);
-    li.appendChild(actions);
-    listEl.appendChild(li);
-  });
-
-  Sortable.create(listEl, {
-    animation: 150,
-    handle: '.drag-handle',
-    onEnd: evt => {
-      const [movedItem] = groceryList.splice(evt.oldIndex, 1);
-      groceryList.splice(evt.newIndex, 0, movedItem);
-      saveList();
+    if (filterMode.value === 'store') {
+      sortedList.sort((a, b) => a.store.localeCompare(b.store));
+    } else if (filterMode.value === 'category') {
+      sortedList.sort((a, b) => a.category.localeCompare(b.category));
+    } else {
+      sortedList.sort((a, b) => a.checked - b.checked);
     }
-  });
+
+    sortedList.forEach((item, index) => {
+      const li = document.createElement('li');
+      li.className = item.checked ? 'checked' : '';
+      li.dataset.index = index;
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = item.checked;
+      checkbox.addEventListener('change', () => {
+        groceryList[index].checked = checkbox.checked;
+        saveList();
+      });
+
+      const content = document.createElement('div');
+      content.className = 'content';
+
+      const nameInput = createEditableField(item.name, newVal => {
+        groceryList[index].name = newVal;
+        saveList();
+      });
+
+      const qtyInput = createEditableField(item.quantity, newVal => {
+        groceryList[index].quantity = newVal;
+        saveList();
+      });
+
+      const storeInput = createEditableField(item.store, newVal => {
+        groceryList[index].store = newVal;
+        saveList();
+      });
+
+      const tags = document.createElement('div');
+      tags.className = 'tags';
+      tags.innerHTML = `
+        Quantity: <span class="pill">${qtyInput.outerHTML}</span>
+        Store: <span class="pill">${storeInput.outerHTML}</span>
+        Category: <span class="pill">${item.category}</span>
+      `;
+
+      content.appendChild(nameInput);
+      content.appendChild(tags);
+
+      const delBtn = document.createElement('button');
+      delBtn.className = 'delete-btn';
+      delBtn.innerHTML = '<strong>X</strong>';
+      delBtn.addEventListener('click', () => {
+        groceryList.splice(index, 1);
+        saveList();
+      });
+
+      const handle = document.createElement('span');
+      handle.className = 'drag-handle';
+      handle.innerHTML = '&#8942;&#8942;';
+
+      const actions = document.createElement('div');
+      actions.className = 'actions';
+      actions.appendChild(delBtn);
+      actions.appendChild(handle);
+
+      li.appendChild(checkbox);
+      li.appendChild(content);
+      li.appendChild(actions);
+      listEl.appendChild(li);
+    });
+
+    Sortable.create(listEl, {
+      animation: 150,
+      handle: '.drag-handle',
+      onEnd: evt => {
+        const [movedItem] = groceryList.splice(evt.oldIndex, 1);
+        groceryList.splice(evt.newIndex, 0, movedItem);
+        saveList();
+      }
+    });
+  } catch (e) {
+    console.error("Error rendering list:", e);
+  }
 }
 
 function updateSuggestions() {
-  const storeDatalist = document.getElementById('store-suggestions');
-  const categoryDatalist = document.getElementById('category-suggestions');
+  try {
+    const storeDatalist = document.getElementById('store-suggestions');
+    const categoryDatalist = document.getElementById('category-suggestions');
 
-  storeDatalist.innerHTML = '';
-  categoryDatalist.innerHTML = '';
+    storeDatalist.innerHTML = '';
+    categoryDatalist.innerHTML = '';
 
-  knownStores.forEach(store => {
-    const opt = document.createElement('option');
-    opt.value = store;
-    storeDatalist.appendChild(opt);
-  });
+    knownStores.clear();
+    knownCategories.clear();
 
-  knownCategories.forEach(cat => {
-    const opt = document.createElement('option');
-    opt.value = cat;
-    categoryDatalist.appendChild(opt);
-  });
+    groceryList.forEach(item => {
+      knownStores.add(item.store);
+      knownCategories.add(item.category);
+    });
+
+    knownStores.forEach(store => {
+      const opt = document.createElement('option');
+      opt.value = store;
+      storeDatalist.appendChild(opt);
+    });
+
+    knownCategories.forEach(cat => {
+      const opt = document.createElement('option');
+      opt.value = cat;
+      categoryDatalist.appendChild(opt);
+    });
+  } catch (e) {
+    console.error("Error updating suggestions:", e);
+  }
 }
 
 function createEditableField(value, onSave) {
@@ -156,8 +176,12 @@ function createEditableField(value, onSave) {
 filterMode.addEventListener('change', renderList);
 
 clearCheckedBtn.addEventListener('click', () => {
-  groceryList.forEach(item => item.checked = false);
-  saveList();
+  try {
+    groceryList.forEach(item => item.checked = false);
+    saveList();
+  } catch (e) {
+    console.error("Error clearing checked:", e);
+  }
 });
 
 updateSuggestions();
