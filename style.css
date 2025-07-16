@@ -54,3 +54,7 @@ body {
 .header button:active {
   transform: scale(0.95);
 }
+
+.modal.hidden {
+  display: none;
+}
