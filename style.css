@@ -5,6 +5,7 @@ body {
   padding: 20px;
   max-width: 600px;
   margin: auto;
+  box-sizing: border-box;
 }
 
 h1 {
@@ -31,10 +32,15 @@ h1 {
   background-color: #fff;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  flex: 1 1 auto;
+  min-width: 120px;
+  max-width: 180px;
+  text-align: center;
 }
 
 .narrow {
   padding: 4px 8px !important;
+  min-width: 90px !important;
 }
 
 .upload-btn {
@@ -56,6 +62,8 @@ form button {
   font-size: 0.9rem;
   border-radius: 8px;
   border: 1px solid #ccc;
+  flex: 1 1 40%;
+  min-width: 120px;
 }
 
 form button {
@@ -63,9 +71,16 @@ form button {
   color: white;
   border: none;
   cursor: pointer;
+  flex: 1 1 100%;
 }
 
 ul#grocery-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul.sublist {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -77,9 +92,11 @@ ul#grocery-list {
   padding: 10px;
   border-radius: 12px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 #grocery-list li.checked {
@@ -88,6 +105,7 @@ ul#grocery-list {
 
 #grocery-list input[type='checkbox'] {
   margin-right: 12px;
+  margin-top: 6px;
 }
 
 .content {
@@ -95,6 +113,7 @@ ul#grocery-list {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-width: 60%;
 }
 
 .tags {
@@ -118,6 +137,10 @@ ul#grocery-list {
   padding: 2px 6px;
   border-radius: 6px;
   transition: background 0.2s;
+  min-width: 20px;
+  max-width: 150px;
+  word-wrap: break-word;
+  white-space: normal;
 }
 
 .editable:focus {
@@ -129,6 +152,8 @@ ul#grocery-list {
   display: flex;
   align-items: center;
   gap: 8px;
+  justify-content: flex-end;
+  min-width: 80px;
 }
 
 .delete-btn {
@@ -143,6 +168,8 @@ ul#grocery-list {
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 28px;
+  width: 28px;
 }
 
 .drag-handle {
