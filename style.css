@@ -261,3 +261,7 @@ ul#grocery-list {
     opacity: 1;
   }
 }
+
+.hidden {
+  display: none !important;
+}
