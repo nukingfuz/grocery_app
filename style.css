@@ -1,12 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+/* Grocery List App - Rev 3 Style */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', sans-serif;
   background-color: #f9f9f9;
   color: #111;
+  margin: 0;
   padding: 16px;
-  max-width: 640px;
-  margin: auto;
+  max-width: 600px;
+  margin-inline: auto;
   box-sizing: border-box;
 }
 
@@ -15,37 +18,31 @@ h1 {
   font-size: 2rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
-  letter-spacing: -0.5px;
 }
 
 .toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
   justify-content: center;
+  gap: 12px;
   margin-bottom: 1.5rem;
-  padding: 10px 0;
 }
 
 .toolbar button,
-.toolbar select,
-.upload-btn {
-  padding: 10px 16px;
+.toolbar select {
   font-size: 1rem;
+  padding: 8px 16px;
   border: none;
-  border-radius: 14px;
-  background-color: #ffffff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  min-width: 120px;
-  text-align: center;
-  font-weight: 500;
+  font-weight: 600;
+  transition: all 0.2s;
 }
 
-.toolbar button:active,
-.toolbar select:active {
-  transform: scale(0.98);
-  background-color: #f0f0f0;
+button:active {
+  transform: scale(0.97);
 }
 
 ul#grocery-list {
@@ -56,15 +53,14 @@ ul#grocery-list {
 
 #grocery-list li {
   background: white;
-  margin-bottom: 12px;
+  border-radius: 12px;
   padding: 12px;
-  border-radius: 16px;
+  margin-bottom: 12px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  align-items: flex-start;
   gap: 12px;
-  font-size: 1.05rem;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+  flex-wrap: wrap;
   transition: background 0.2s ease;
 }
 
@@ -72,9 +68,9 @@ ul#grocery-list {
   opacity: 0.55;
 }
 
-#grocery-list input[type='checkbox'] {
+input[type='checkbox'] {
   transform: scale(1.4);
-  cursor: pointer;
+  margin-top: 6px;
 }
 
 .content {
@@ -82,158 +78,123 @@ ul#grocery-list {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  font-size: 1rem;
+}
+
+.item-name {
+  font-weight: 600;
 }
 
 .tags {
-  font-size: 0.85rem;
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .pill {
   padding: 4px 10px;
   border-radius: 999px;
+  font-size: 0.85rem;
   font-weight: 500;
   color: white;
-  white-space: nowrap;
 }
 
 .pill.store {
-  background: #4CAF50;
+  background-color: #4CAF50;
 }
 
 .pill.category {
-  background: #2196F3;
+  background-color: #2196F3;
 }
 
 .actions {
   display: flex;
   align-items: center;
   gap: 10px;
-  justify-content: flex-end;
-  flex-shrink: 0;
 }
 
 .delete-btn {
-  background: #ffd6d6;
+  background-color: #ffe5e5;
+  color: black;
   border: none;
   border-radius: 6px;
-  padding: 4px 6px;
+  padding: 6px 10px;
   cursor: pointer;
-  font-size: 1rem;
-  line-height: 1;
-  color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .drag-handle {
   cursor: grab;
   font-size: 1.4rem;
-  padding: 0 6px;
   color: #888;
-  display: flex;
-  align-items: center;
+  user-select: none;
+}
+
+.sortable-chosen {
+  background-color: #f0f8ff !important;
+  box-shadow: 0 0 0 2px #cceeff inset;
 }
 
 .sortable-ghost {
-  opacity: 0.3;
-  background: #e0f7ff;
-  border-radius: 16px;
+  opacity: 0.4;
+  background: #d0eaff;
+  transform: scale(1.01);
 }
 
+/* Modal Styles */
 .modal {
-  display: none;
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
-  z-index: 10;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
-
-.modal.active {
-  display: flex;
-}
-
-.modal-content {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background: white;
-  padding: 24px;
+  padding: 20px;
   border-radius: 16px;
-  max-width: 480px;
-  width: 100%;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-  position: relative;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  width: 90%;
+  max-width: 400px;
 }
 
-.modal-content h2 {
-  margin-top: 0;
-  font-size: 1.5rem;
-  margin-bottom: 16px;
+.modal.hidden {
+  display: none;
 }
 
-.modal-content form {
+.modal .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1rem;
+  background-color: #ff5e5e;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  text-align: center;
+  line-height: 28px;
+  cursor: pointer;
+}
+
+#item-form {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  margin-top: 16px;
 }
 
-.modal-content input {
-  padding: 10px;
+#item-form input,
+#item-form button {
   font-size: 1rem;
-  border-radius: 10px;
+  padding: 10px;
   border: 1px solid #ccc;
+  border-radius: 8px;
 }
 
-.modal-content button[type="submit"] {
+#item-form button {
   background-color: #4CAF50;
   color: white;
   border: none;
-  padding: 12px;
-  border-radius: 10px;
-  font-size: 1rem;
-  cursor: pointer;
   font-weight: 600;
-}
-
-.modal-content .close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: #ff4d4d;
-  color: white;
-  border: none;
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  font-size: 1rem;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
   cursor: pointer;
-}
-
-.hidden {
-  display: none;
-}
-
-@media (max-width: 480px) {
-  .toolbar {
-    flex-direction: column;
-  }
-
-  .toolbar button,
-  .toolbar select {
-    width: 100%;
-  }
 }
