@@ -1,11 +1,11 @@
 {
   "name": "Grocery List",
   "short_name": "Groceries",
-  "description": "A clean and seamless grocery list app",
+  "description": "A smooth, minimal grocery list app with filtering, tagging, and drag-and-drop",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f8f8f8",
-  "theme_color": "#007AFF",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
   "icons": [
     {
       "src": "grocery_icon.png",
