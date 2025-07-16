@@ -1,8 +1,8 @@
-// Grocery List App Script (Rev3 – Bulletproof Logic with Fixed Drag)
+// Grocery List App Script (Rev3.1 – Finalized Drag-and-Drop Enhancements)
 
 let groceryList = JSON.parse(localStorage.getItem('groceryList')) || [];
 
-const listEl = document.getElementById('unchecked-list');
+const listEl = document.getElementById('unchecked-list'); // ✅ Corrected target
 const form = document.getElementById('item-form');
 const nameInput = document.getElementById('item-name');
 const storeInput = document.getElementById('item-store');
@@ -48,7 +48,7 @@ function renderList() {
 
   const listItemMap = [];
 
-  [...unchecked, ...checked].forEach((item, index) => {
+  [...unchecked, ...checked].forEach((item) => {
     const li = document.createElement('li');
     li.setAttribute('data-id', item.id);
     if (item.checked) li.classList.add('checked');
@@ -112,6 +112,9 @@ function renderList() {
     draggable: 'li:not(.checked)',
     ghostClass: 'sortable-ghost',
     chosenClass: 'sortable-chosen',
+    forceFallback: true,            // ✅ Ensures ghost element always shows
+    fallbackOnBody: true,
+    swapThreshold: 0.65,
     onEnd: evt => {
       const from = evt.oldIndex;
       const to = evt.newIndex;

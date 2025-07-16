@@ -156,11 +156,12 @@ input[type='checkbox'] {
   transform: scale(1.1);
 }
 
+/* Drag-and-drop visual improvements */
 .sortable-chosen {
   background-color: #f0faff !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   transform: scale(1.02);
   z-index: 1000;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .sortable-ghost {
@@ -168,6 +169,11 @@ input[type='checkbox'] {
   background: #cce7ff;
   border: 2px dashed #88bde6;
   transform: scale(0.98);
+}
+
+/* Optional: Smooth transition for natural item spacing */
+#unchecked-list li {
+  transition: transform 0.2s ease;
 }
 
 .modal {
