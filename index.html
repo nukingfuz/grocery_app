@@ -28,15 +28,16 @@
       <button class="close-btn" id="close-add-modal">✖</button>
       <h2>Add New Item</h2>
       <form id="item-form">
+	<input type="text" name="fake-name" autocomplete="name" style="position: absolute; top: -1000px; left: -1000px;" />
 	<input
-  	type="text"
+ 	type="text"
   	id="item-name"
-  	placeholder="Item name"
-  	name="dont-autofill"
-  	autocomplete="new-password"
-  	autocorrect="off"
-  	autocapitalize="off"
-  	required
+ 	placeholder="Item name"
+ 	name="item-entry"
+	autocomplete="off"
+	autocorrect="off"
+ 	autocapitalize="off"
+ 	required
 	/>
         <input type="text" id="item-store" placeholder="Store" list="store-suggestions" required />
         <input type="text" id="item-category" placeholder="Category" list="category-suggestions" required />
