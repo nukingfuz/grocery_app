@@ -1,81 +1,75 @@
-/* Grocery List App - Rev2 Styles */
+/* Grocery List App - Rev2 Optimized Style */
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #f9f9f9;
+  background: #f9f9f9;
   color: #111;
+  margin: 0;
   padding: 16px;
-  max-width: 640px;
+  max-width: 600px;
   margin: auto;
   box-sizing: border-box;
-  transition: background-color 0.3s ease;
-  overflow-x: hidden;
 }
 
 h1 {
   text-align: center;
   font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 1.2rem;
-  letter-spacing: -0.5px;
+  margin-bottom: 1rem;
 }
 
 .toolbar {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
-  justify-content: center;
-  margin-bottom: 1.2rem;
+  margin-bottom: 20px;
 }
 
 .toolbar button,
-.toolbar select,
-.upload-btn {
-  padding: 10px 16px;
+.toolbar select {
+  padding: 10px 14px;
   font-size: 1rem;
   border: none;
-  border-radius: 12px;
-  background-color: #ffffff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  font-weight: 500;
+  min-width: 120px;
 }
 
-.narrow {
-  padding: 6px 10px !important;
-  min-width: 100px !important;
+.hidden {
+  display: none;
 }
 
-ul#grocery-list {
+#grocery-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
 #grocery-list li {
-  background: white;
-  margin-bottom: 12px;
-  padding: 12px;
-  border-radius: 16px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  padding: 14px;
+  border-radius: 14px;
+  margin-bottom: 10px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   flex-wrap: wrap;
   gap: 10px;
-  font-size: 1.05rem;
-  transition: background 0.2s ease;
 }
 
 #grocery-list li.checked {
   opacity: 0.5;
 }
 
-#grocery-list input[type='checkbox'] {
-  margin-right: 16px;
-  margin-top: 8px;
+input[type="checkbox"] {
   transform: scale(1.4);
+  margin-top: 6px;
+  margin-right: 12px;
 }
 
 .content {
@@ -86,20 +80,34 @@ ul#grocery-list {
   min-width: 60%;
 }
 
+.editable {
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  background: transparent;
+  outline: none;
+  padding: 4px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.editable:focus {
+  background-color: #e3fbe6;
+}
+
 .tags {
-  font-size: 0.85rem;
   display: flex;
+  gap: 8px;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 4px;
 }
 
 .pill {
-  padding: 5px 10px;
+  padding: 4px 10px;
   border-radius: 999px;
-  font-weight: 500;
-  color: white;
   font-size: 0.85rem;
+  font-weight: 500;
+  color: #fff;
+  white-space: nowrap;
 }
 
 .pill.store {
@@ -110,26 +118,10 @@ ul#grocery-list {
   background: #2196F3;
 }
 
-.editable {
-  font-weight: 500;
-  font-size: 1rem;
-  display: inline-block;
-  border: none;
-  background: transparent;
-  padding: 4px 6px;
-  border-radius: 6px;
-}
-
-.editable:focus {
-  outline: none;
-  background-color: #def3e0;
-}
-
 .actions {
   display: flex;
-  align-items: center;
   gap: 10px;
-  min-width: 60px;
+  align-items: center;
 }
 
 .delete-btn {
@@ -138,106 +130,87 @@ ul#grocery-list {
   border-radius: 8px;
   padding: 6px;
   cursor: pointer;
-  font-size: 1rem;
   height: 32px;
   width: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 1rem;
+  font-weight: bold;
   color: black;
 }
 
 .drag-handle {
   cursor: grab;
-  font-size: 1.4rem;
-  padding: 0 6px;
-  color: #888;
-  display: flex;
-  align-items: center;
-}
-
-.drag-handle:active {
-  transform: scale(1.15);
+  font-size: 1.3rem;
+  color: #999;
+  user-select: none;
 }
 
 .sortable-chosen {
-  background: #f0f8ff !important;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
+  background: #eef7ff !important;
   transform: scale(1.02) !important;
+  z-index: 2;
 }
 
 .sortable-ghost {
-  opacity: 0.4;
-  background: #dfeffd;
+  opacity: 0.5;
+  background: #cce5ff;
 }
 
+/* MODALS */
 .modal {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 999;
-}
-
-.modal.hidden {
-  display: none;
+  z-index: 9999;
 }
 
 .modal-content {
   background: white;
   padding: 20px;
-  border-radius: 16px;
+  border-radius: 14px;
   width: 90%;
   max-width: 400px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-.modal-content h2 {
-  margin-top: 0;
-  margin-bottom: 16px;
-  font-size: 1.25rem;
-  text-align: center;
-}
-
-.modal-content form {
+  position: relative;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
-.modal-content input[type="text"],
-.modal-content input[type="file"] {
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
-
-.modal-content button {
-  padding: 10px;
-  font-size: 1rem;
-  font-weight: 600;
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #c00;
+  cursor: pointer;
+  background: none;
   border: none;
+}
+
+.modal input,
+.modal button,
+.modal label {
+  font-size: 1rem;
+}
+
+.modal input {
+  padding: 10px;
   border-radius: 10px;
+  border: 1px solid #ccc;
+  width: 100%;
+  font-weight: 500;
+}
+
+.modal button {
   background: #4CAF50;
   color: white;
+  font-weight: 600;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
   cursor: pointer;
-}
-
-.modal-content button:hover {
-  background: #43a047;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
