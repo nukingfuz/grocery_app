@@ -1,4 +1,4 @@
-// Grocery List App Script
+// Grocery List App Script - Rev2
 let groceryList = JSON.parse(localStorage.getItem('groceryList')) || [];
 let knownStores = new Set();
 let knownCategories = new Set();
@@ -26,8 +26,8 @@ function updateSuggestions() {
   knownStores.clear();
   knownCategories.clear();
   groceryList.forEach(item => {
-    knownStores.add(item.store);
-    knownCategories.add(item.category);
+    if (item.store) knownStores.add(item.store);
+    if (item.category) knownCategories.add(item.category);
   });
 
   const storeDatalist = document.getElementById('store-suggestions');
@@ -40,7 +40,6 @@ function updateSuggestions() {
     opt.value = store;
     storeDatalist.appendChild(opt);
   });
-
   knownCategories.forEach(cat => {
     const opt = document.createElement('option');
     opt.value = cat;
@@ -65,17 +64,16 @@ function createEditableField(value, onSave) {
 
 function renderList() {
   listEl.innerHTML = '';
-  let sorted = [...groceryList];
 
-  if (filterMode.value === 'store') {
-    sorted.sort((a, b) => a.store.localeCompare(b.store));
-  } else if (filterMode.value === 'category') {
-    sorted.sort((a, b) => a.category.localeCompare(b.category));
-  } else {
-    sorted.sort((a, b) => a.checked - b.checked);
-  }
+  const unchecked = groceryList.filter(i => i.checked === false);
+  const checked = groceryList.filter(i => i.checked === true)
+    .sort((a, b) =>
+      a.store.localeCompare(b.store) ||
+      a.category.localeCompare(b.category) ||
+      a.name.localeCompare(b.name)
+    );
 
-  sorted.forEach((item, index) => {
+  [...unchecked, ...checked].forEach((item, index) => {
     const li = document.createElement('li');
     li.className = item.checked ? 'checked' : '';
 
@@ -96,29 +94,20 @@ function renderList() {
 
     const tags = document.createElement('div');
     tags.className = 'tags';
-
     const storeTag = document.createElement('span');
     storeTag.className = 'pill store';
     storeTag.textContent = item.store;
-    storeTag.contentEditable = true;
-    storeTag.addEventListener('blur', () => {
-      item.store = storeTag.textContent.trim();
-      saveList();
-    });
-
     const categoryTag = document.createElement('span');
     categoryTag.className = 'pill category';
     categoryTag.textContent = item.category;
-    categoryTag.contentEditable = true;
-    categoryTag.addEventListener('blur', () => {
-      item.category = categoryTag.textContent.trim();
-      saveList();
-    });
-
     tags.appendChild(storeTag);
     tags.appendChild(categoryTag);
+
     content.appendChild(nameField);
     content.appendChild(tags);
+
+    const actions = document.createElement('div');
+    actions.className = 'actions';
 
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'delete-btn';
@@ -127,15 +116,14 @@ function renderList() {
       groceryList.splice(index, 1);
       saveList();
     });
-
-    const handle = document.createElement('span');
-    handle.className = 'drag-handle';
-    handle.innerHTML = '&#8942;&#8942;';
-
-    const actions = document.createElement('div');
-    actions.className = 'actions';
     actions.appendChild(deleteBtn);
-    actions.appendChild(handle);
+
+    if (!item.checked) {
+      const handle = document.createElement('span');
+      handle.className = 'drag-handle';
+      handle.innerHTML = '&#8942;&#8942;';
+      actions.appendChild(handle);
+    }
 
     li.appendChild(checkbox);
     li.appendChild(content);
@@ -144,17 +132,18 @@ function renderList() {
   });
 
   Sortable.create(listEl, {
-    animation: 200,
+    animation: 180,
     handle: '.drag-handle',
-    ghostClass: '', // no visual ghost
-    chosenClass: 'sortable-chosen',
-    dragClass: '',
-    onEnd: e => {
-      const unchecked = groceryList.filter(i => !i.checked);
-      const checked = groceryList.filter(i => i.checked);
-      const [moved] = unchecked.splice(e.oldIndex, 1);
-      unchecked.splice(e.newIndex, 0, moved);
-      groceryList = [...unchecked, ...checked.sort((a, b) => a.store.localeCompare(b.store) || a.category.localeCompare(b.category))];
+    filter: '.checked',
+    onEnd: evt => {
+      const newOrder = [];
+      [...listEl.children].forEach(li => {
+        const name = li.querySelector('.editable').textContent.trim();
+        const item = groceryList.find(i => i.name === name && !i.checked);
+        if (item) newOrder.push(item);
+      });
+      const checkedItems = groceryList.filter(i => i.checked);
+      groceryList = [...newOrder, ...checkedItems];
       saveList();
     }
   });
@@ -172,9 +161,13 @@ form.addEventListener('submit', e => {
   saveList();
 });
 
-addItemBtn.addEventListener('click', () => addItemModal.classList.remove('hidden'));
+addItemBtn.addEventListener('click', () => {
+  addItemModal.classList.toggle('hidden');
+  form.reset();
+});
+
 closeAddModalBtn.addEventListener('click', () => addItemModal.classList.add('hidden'));
-settingsBtn.addEventListener('click', () => settingsModal.classList.remove('hidden'));
+settingsBtn.addEventListener('click', () => settingsModal.classList.toggle('hidden'));
 closeSettingsBtn.addEventListener('click', () => settingsModal.classList.add('hidden'));
 filterMode.addEventListener('change', renderList);
 clearCheckedBtn.addEventListener('click', () => {

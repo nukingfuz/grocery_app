@@ -4,24 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-title" content="Grocery List" />
-  <link rel="apple-touch-icon" href="grocery_icon.png" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="grocery_icon.png" type="image/png" />
+  <link rel="apple-touch-icon" href="grocery_icon.png" />
+  <title>Grocery List</title>
   <link rel="stylesheet" href="style.css" />
-  <title>Grocery List App</title>
 </head>
 <body>
   <h1>Grocery List</h1>
-
   <div class="toolbar">
     <select id="filter-mode">
-      <option value="default">Sort: Default</option>
+      <option value="default">Sort by Unchecked</option>
       <option value="store">Sort by Store</option>
       <option value="category">Sort by Category</option>
     </select>
-    <button id="clear-checked" class="narrow">Uncheck All</button>
-    <button id="add-item-btn" class="narrow">+ Add</button>
-    <button id="settings-btn" class="narrow">Settings</button>
+    <button id="add-item-btn">＋</button>
+    <button id="settings-btn">☰</button>
+    <button id="clear-checked" class="narrow">Clear Checked</button>
   </div>
 
   <ul id="grocery-list"></ul>
@@ -30,22 +30,20 @@
   <div id="add-item-modal" class="modal hidden">
     <form id="item-form">
       <input id="item-name" placeholder="Item name" required />
-      <input id="item-store" placeholder="Store" list="store-suggestions" required />
-      <input id="item-category" placeholder="Category" list="category-suggestions" required />
+      <input id="item-store" list="store-suggestions" placeholder="Store" required />
+      <input id="item-category" list="category-suggestions" placeholder="Category" required />
       <datalist id="store-suggestions"></datalist>
       <datalist id="category-suggestions"></datalist>
       <button type="submit">Add Item</button>
-      <button type="button" id="close-add-modal">Cancel</button>
     </form>
+    <button id="close-add-modal" class="close-btn">Close</button>
   </div>
 
   <!-- Settings Modal -->
   <div id="settings-modal" class="modal hidden">
-    <div class="settings-content">
-      <button id="download-list">Download List</button>
-      <label class="upload-btn">Upload List<input type="file" id="upload-list" hidden /></label>
-      <button type="button" id="close-settings">Close</button>
-    </div>
+    <input type="file" id="upload-list" class="upload-btn" />
+    <button id="download-list">Download List</button>
+    <button id="close-settings" class="close-btn">Close</button>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
