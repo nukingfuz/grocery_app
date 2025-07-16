@@ -155,18 +155,20 @@ ul#grocery-list {
   transform: scale(1.1);
 }
 
+/* Add or replace these at the end of your style.css */
+
 .sortable-chosen {
   background-color: #e0f7ff !important;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transform: scale(1.02);
-  z-index: 10;
+  opacity: 0.9;
 }
 
 .sortable-ghost {
+  background-color: #d0eaff !important;
+  border: 2px dashed #2196F3;
   opacity: 0.4;
-  background: #dfeffd;
-  border: 2px dashed #007aff;
-  box-sizing: border-box;
+  transform: translateY(4px);
 }
 
 .modal {
