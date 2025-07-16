@@ -7,8 +7,6 @@ body {
   padding: 16px;
   max-width: 640px;
   margin: auto;
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
 }
 
 h1 {
@@ -26,8 +24,7 @@ h1 {
   margin-bottom: 1.5rem;
 }
 
-.toolbar button,
-.toolbar select {
+.toolbar button {
   padding: 10px 16px;
   font-size: 1rem;
   border: none;
@@ -39,7 +36,6 @@ h1 {
   min-width: 100px;
   text-align: center;
   font-weight: 500;
-  transition: all 0.2s ease;
 }
 
 .narrow {
@@ -47,17 +43,13 @@ h1 {
   min-width: 90px;
 }
 
-ul#grocery-list,
-ul#unchecked-list,
-ul#checked-list {
+ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-#grocery-list li,
-#unchecked-list li,
-#checked-list li {
+li {
   background: white;
   margin-bottom: 10px;
   padding: 12px;
@@ -66,9 +58,7 @@ ul#checked-list {
   align-items: flex-start;
   justify-content: space-between;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  flex-wrap: wrap;
   gap: 10px;
-  transition: background 0.2s;
 }
 
 li.checked {
@@ -133,47 +123,6 @@ input[type='checkbox'] {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
-}
-
-.delete-btn:active {
-  background-color: #ffbfbf;
-  transform: scale(0.95);
-}
-
-.drag-handle {
-  cursor: grab;
-  font-size: 1.2rem;
-  padding: 4px;
-  color: #aaa;
-  display: flex;
-  align-items: center;
-  user-select: none;
-  transition: transform 0.15s ease;
-}
-
-.drag-handle:active {
-  transform: scale(1.1);
-}
-
-/* Drag-and-drop visual improvements */
-.sortable-chosen {
-  background-color: #f0faff !important;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  transform: scale(1.02);
-  z-index: 1000;
-}
-
-.sortable-ghost {
-  opacity: 0.5;
-  background: #cce7ff;
-  border: 2px dashed #88bde6;
-  transform: scale(0.98);
-}
-
-/* Optional: Smooth transition for natural item spacing */
-#unchecked-list li {
-  transition: transform 0.2s ease;
 }
 
 .modal {
@@ -198,7 +147,6 @@ input[type='checkbox'] {
   width: 90%;
   position: relative;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  animation: fadeIn 0.25s ease-in-out;
 }
 
 .close-btn {
@@ -212,12 +160,6 @@ input[type='checkbox'] {
   font-weight: bold;
   color: black;
   cursor: pointer;
-  transition: background 0.2s;
-}
-
-.close-btn:active {
-  background: #ffbfbf;
-  transform: scale(0.95);
 }
 
 form {
@@ -241,7 +183,6 @@ form button {
   color: white;
   border: none;
   cursor: pointer;
-  font-weight: 600;
 }
 
 .upload-btn {
@@ -252,15 +193,4 @@ form button {
   margin-top: 10px;
   cursor: pointer;
   font-weight: 500;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }

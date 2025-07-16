@@ -1,7 +1,7 @@
 {
   "name": "Grocery List",
   "short_name": "Groceries",
-  "description": "A smooth, minimal grocery list app with filtering, tagging, and drag-and-drop",
+  "description": "A minimal grocery list app with auto-sorting and tagging",
   "start_url": "./index.html",
   "display": "standalone",
   "theme_color": "#ffffff",
