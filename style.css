@@ -9,6 +9,8 @@ body {
   margin: auto;
   box-sizing: border-box;
   transition: background-color 0.3s ease;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 h1 {
@@ -30,7 +32,6 @@ h1 {
   padding: 10px 0;
   opacity: 0;
   animation: fadeIn 0.4s ease 0.2s forwards;
-  position: relative;
 }
 
 .toolbar button,
@@ -103,8 +104,6 @@ ul#grocery-list {
   margin: 0;
   animation: fadeIn 0.6s ease 0.4s forwards;
   opacity: 0;
-  -webkit-user-select: none;
-  touch-action: pan-y;
 }
 
 #grocery-list li {
@@ -220,7 +219,6 @@ ul#grocery-list {
   font-size: 1.4rem;
   padding: 0 6px;
   user-select: none;
-  touch-action: none;
   color: #888;
   transition: transform 0.15s ease;
   display: flex;
@@ -232,9 +230,9 @@ ul#grocery-list {
 }
 
 .sortable-chosen {
-  background: #f0f8ff !important;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
-  transform: scale(1.02) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: scale(1) !important;
 }
 
 .sortable-ghost {

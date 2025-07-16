@@ -143,25 +143,18 @@ function renderList() {
     listEl.appendChild(li);
   });
 
-  // Destroy existing Sortable instance to prevent duplicate bugs
-  if (window.sortableInstance) {
-    window.sortableInstance.destroy();
-  }
-
-  window.sortableInstance = Sortable.create(listEl, {
+  Sortable.create(listEl, {
     animation: 200,
     handle: '.drag-handle',
-    ghostClass: 'sortable-ghost',
+    ghostClass: '', // no visual ghost
     chosenClass: 'sortable-chosen',
+    dragClass: '',
     onEnd: e => {
       const unchecked = groceryList.filter(i => !i.checked);
       const checked = groceryList.filter(i => i.checked);
       const [moved] = unchecked.splice(e.oldIndex, 1);
       unchecked.splice(e.newIndex, 0, moved);
-      groceryList = [
-        ...unchecked,
-        ...checked.sort((a, b) => a.store.localeCompare(b.store) || a.category.localeCompare(b.category))
-      ];
+      groceryList = [...unchecked, ...checked.sort((a, b) => a.store.localeCompare(b.store) || a.category.localeCompare(b.category))];
       saveList();
     }
   });
