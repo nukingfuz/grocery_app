@@ -8,19 +8,20 @@
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="grocery_icon.png" />
   <link rel="stylesheet" href="style.css" />
-  <title>Grocery List</title>
+  <title>Groceries</title>
 </head>
 <body>
-  <h1>Grocery List</h1>
 
-  <div class="toolbar">
-  <div class="top-buttons">
-    <button id="settings-btn">☰</button>
-    <button id="clear-checked" class="narrow">Clear Checked</button>
-  </div>
-  <button id="add-item-btn" class="full-add">＋</button>
-  </div>
-
+  <header class="app-header">
+    <div class="header-left">
+      <button id="settings-btn" class="icon-btn">☰</button>
+      <button id="clear-checked" class="icon-btn" title="Clear Checked">✔️</button>
+    </div>
+    <h1 class="app-title">Groceries</h1>
+    <div class="header-right">
+      <button id="add-item-btn" class="icon-btn add-btn">＋</button>
+    </div>
+  </header>
 
   <ul id="unchecked-list"></ul>
   <ul id="checked-list"></ul>
@@ -31,17 +32,17 @@
       <button class="close-btn" id="close-add-modal">✖</button>
       <h2>Add New Item</h2>
       <form id="item-form">
-	<input type="text" name="fake-name" autocomplete="name" style="position: absolute; top: -1000px; left: -1000px;" />
-	<input
- 	type="text"
-  	id="item-name"
- 	placeholder="Item name"
- 	name="item-entry"
-	autocomplete="off"
-	autocorrect="off"
- 	autocapitalize="off"
- 	required
-	/>
+        <input type="text" name="fake-name" autocomplete="name" style="position: absolute; top: -1000px; left: -1000px;" />
+        <input
+          type="text"
+          id="item-name"
+          placeholder="Item name"
+          name="item-entry"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          required
+        />
         <input type="text" id="item-store" placeholder="Store" list="store-suggestions" required />
         <input type="text" id="item-category" placeholder="Category" list="category-suggestions" required />
         <button type="submit">Add</button>
